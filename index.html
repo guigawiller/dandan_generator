@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dandan Generator BR</title>
+  <title>Dandan Simulator BR</title>
 
   <style>
     * {
@@ -25,7 +26,7 @@
       background: #fff;
       border-radius: 22px;
       padding: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
       border: 5px solid #002776;
     }
 
@@ -57,7 +58,9 @@
       margin-top: 12px;
     }
 
-    input, textarea, button {
+    input,
+    textarea,
+    button {
       width: 100%;
       font-size: 16px;
       border-radius: 12px;
@@ -90,77 +93,119 @@
       font-weight: bold;
       color: #009c3b;
     }
+
+    .idiomas {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .idiomas button {
+      width: 55px;
+      padding: 8px;
+      font-size: 28px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <div id="formulario">
-    <h1>🇧🇷 Dandan Simulator 🇧🇷</h1>
+    <div id="formulario">
+      <h1>🇧🇷 Dandan Simulator 🇧🇷</h1>
 
-    <div class="foto">
-      <img src="dandan2.png" alt="Dandan">
+      <div class="foto">
+        <img src="dandan2.png" alt="Dandan">
+      </div>
+
+      <label>Time que ganhou</label>
+      <input id="ganhou">
+
+      <label>Time que perdeu</label>
+      <input id="perdeu">
+
+      <label>Jogador que tava bichado</label>
+      <input id="jogador">
+
+      <button onclick="gerarTexto()">Gerar texto</button>
     </div>
 
-    <label>Time que ganhou</label>
-    <input id="ganhou">
-
-    <label>Time que perdeu</label>
-    <input id="perdeu">
-
-    <label>Jogador que tava bichado</label>
-    <input id="jogador">
-
-    <button onclick="gerarTexto()">Gerar texto</button>
-  </div>
-
-  <div id="resultadoTela" style="display:none;">
+    <div id="resultadoTela" style="display:none;">
       <h1>🇧🇷 Resultado</h1>
 
       <div class="foto">
-          <img src="dandan.png" alt="Dandan 2">
+        <img src="dandan.png" alt="Dandan 2">
       </div>
-
+      <div class="idiomas">
+        <button onclick="trocarIdioma('pt')">🇧🇷</button>
+        <button onclick="trocarIdioma('en')">🇺🇸</button>
+        <button onclick="trocarIdioma('es')">🇪🇸</button>
+        <button onclick="trocarIdioma('ja')">🇯🇵</button>
+        <button onclick="trocarIdioma('ar')">🇸🇦</button>
+      </div>
       <textarea id="resultado" readonly></textarea>
 
       <button onclick="copiarTexto()">📋 Copiar</button>
       <button onclick="voltar()">⬅️ Voltar</button>
 
       <div class="msg" id="msg"></div>
+    </div>
+
   </div>
 
-</div>
+  <script>
+    let dados = {};
+    function gerarTexto() {
+      const ganhou = document.getElementById("ganhou").value;
+      const perdeu = document.getElementById("perdeu").value;
+      const jogador = document.getElementById("jogador").value;
 
-<script>
-function gerarTexto() {
-  const ganhou = document.getElementById("ganhou").value;
-  const perdeu = document.getElementById("perdeu").value;
-  const jogador = document.getElementById("jogador").value;
+      dados = {
+        ganhou,
+        perdeu,
+        jogador
+      };
 
-  const texto =
-`É complicado. Se o ${perdeu} ganha, falam que o ${ganhou} não deu tudo de si e não se importa com essa competição. Se o ${ganhou} ganha no tempo normal ou prorrogação, falam que o ${perdeu} é muito inferior kkkk a galera tem que decidir uai... Caímos, mas jogamos de igual pra igual. Tiveram que puxar o ${jogador} bichado do banco kkkkk mas é isso aí. Mérito do ${ganhou}.`;
+      document.getElementById("formulario").style.display = "none";
+      document.getElementById("resultadoTela").style.display = "block";
 
-  document.getElementById("resultado").value = texto;
+      trocarIdioma("pt");
+    }
+    function copiarTexto() {
+      navigator.clipboard.writeText(
+        document.getElementById("resultado").value
+      );
 
-  document.getElementById("formulario").style.display = "none";
-  document.getElementById("resultadoTela").style.display = "block";
-}
+      document.getElementById("msg").innerHTML = "✅ Copiado!";
+    }
 
-function copiarTexto() {
-  navigator.clipboard.writeText(
-    document.getElementById("resultado").value
-  );
+    function voltar() {
+      document.getElementById("resultadoTela").style.display = "none";
+      document.getElementById("formulario").style.display = "block";
+      document.getElementById("msg").innerHTML = "";
+    }
+    function trocarIdioma(idioma) {
+      const { ganhou, perdeu, jogador } = dados;
 
-  document.getElementById("msg").innerHTML = "✅ Copiado!";
-}
+      const textos = {
+        pt: `É complicado. Se o ${perdeu} ganha, falam que o ${ganhou} não deu tudo de si e não se importa com essa competição. Se o ${ganhou} ganha no tempo normal ou prorrogação, falam que o ${perdeu} é muito inferior kkkk a galera tem que decidir uai... Caímos, mas jogamos de igual pra igual. Tiveram que puxar o ${jogador} bichado do banco kkkkk mas é isso aí. Mérito do ${ganhou}.`,
 
-function voltar() {
-  document.getElementById("resultadoTela").style.display = "none";
-  document.getElementById("formulario").style.display = "block";
-  document.getElementById("msg").innerHTML = "";
-}
-</script>
+        en: `It's complicated. If ${perdeu} wins, people say ${ganhou} didn't give everything and doesn't care about this competition. If ${ganhou} wins in regular time or extra time, they say ${perdeu} is clearly inferior lol. People need to make up their minds... We were eliminated, but we played on equal terms. They even had to bring injured ${jogador} off the bench hahaha. But that's how it goes. Credit to ${ganhou}.`,
+
+        es: `Es complicado. Si gana ${perdeu}, dicen que ${ganhou} no lo dio todo y que no le importa esta competición. Si ${ganhou} gana en tiempo normal o prórroga, dicen que ${perdeu} es mucho más débil jajaja. La gente tiene que decidirse... Perdimos, pero jugamos en igualdad de condiciones. Tuvieron que sacar al lesionado ${jogador} del banquillo jajaja. Pero así son las cosas. Mérito de ${ganhou}.`,
+
+        ja: `複雑だよね。もし${perdeu}が勝てば、みんな${ganhou}は本気を出していなかった、この大会を気にしていないと言う。もし${ganhou}が通常時間や延長戦で勝てば、${perdeu}はかなり格下だと言われる（笑）。みんな意見を決めてほしいよね…。負けたけど、互角に戦った。怪我をしていた${jogador}までベンチから出さなければならなかった（笑）。でもまあ、そういうこと。${ganhou}に敬意を表する。`,
+
+        ar: `الأمر معقد. إذا فاز ${perdeu}، يقولون إن ${ganhou} لم يبذل كل ما لديه ولا يهتم بهذه البطولة. وإذا فاز ${ganhou} في الوقت الأصلي أو الإضافي، يقولون إن ${perdeu} أضعف بكثير هههه. على الناس أن يقرروا رأيهم... خرجنا من البطولة، لكننا لعبنا بندية. حتى أنهم اضطروا لإشراك ${jogador} المصاب من مقاعد البدلاء هههه. لكن هذه هي كرة القدم. كل التقدير لـ ${ganhou}.`
+      };
+
+      document.getElementById("resultado").value = textos[idioma];
+    }
+  </script>
 
 </body>
+
 </html>
